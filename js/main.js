@@ -72,7 +72,18 @@ function getLevelUpCost(level) {
 // =================================
 
 function levelUpCharacter(id, smallCount, mediumCount, largeCount) {
-  const character = gameData.ownedCharacters?.[id];
+    if (
+    !Number.isInteger(smallCount) ||
+    !Number.isInteger(mediumCount) ||
+    !Number.isInteger(largeCount) ||
+    smallCount < 0 ||
+    mediumCount < 0 ||
+    largeCount < 0
+  ) {
+    alert("アイテムの個数を正しく入力してください！");
+    return false;
+  }
+　const character = gameData.ownedCharacters?.[id];
 
   if (!character) {
     alert("このキャラクターは未加入です！");
