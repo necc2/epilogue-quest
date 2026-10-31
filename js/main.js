@@ -149,6 +149,9 @@ function showCharacterDetail(id) {
 
   const content = document.getElementById("game-content");
 
+  const owned = gameData.ownedCharacters?.[id];
+  const fragments = gameData.fragments?.[id] || 0;
+
   content.innerHTML = `
     <section class="home-screen">
       <button onclick="renderCharacters()">← 一覧に戻る</button>
@@ -156,6 +159,19 @@ function showCharacterDetail(id) {
       <div class="character-icon">✦</div>
       <h2>${character.name}</h2>
       <p>ID：${character.id}</p>
+
+      <div class="stage-box">
+        <strong>${owned ? "加入済み" : "未加入"}</strong>
+        ${
+          owned
+            ? `
+              <p>レアリティ：${owned.rarity}</p>
+              <p>レベル：${owned.level}</p>
+              <p>所持欠片：${fragments}</p>
+            `
+            : `<p>まだ仲間になっていません。</p>`
+        }
+      </div>
 
       <div class="stage-box">
         <span>属性</span>
