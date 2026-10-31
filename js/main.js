@@ -43,6 +43,30 @@ function loadGameData() {
 }
 
 let gameData = loadGameData();
+// =================================
+// キャラクター育成・経験値計算
+// =================================
+
+// 最大レベル
+const MAX_CHARACTER_LEVEL = 99;
+
+// 次のレベルに必要な経験値
+function getRequiredExp(level) {
+  if (level >= MAX_CHARACTER_LEVEL) {
+    return 0;
+  }
+
+  return 200 + 50 * (level - 1);
+}
+
+// レベルアップに必要なコイン
+function getLevelUpCost(level) {
+  if (level >= MAX_CHARACTER_LEVEL) {
+    return 0;
+  }
+
+  return 200 + 50 * (level - 1);
+}
 
 function saveGameData() {
   localStorage.setItem(
