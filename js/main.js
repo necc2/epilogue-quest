@@ -65,7 +65,7 @@ function getLevelUpCost(level) {
     return 0;
   }
 
-  return 200 + 50 * (level - 1);
+  return 125 + 25 * (level - 1);
 }
 
 function saveGameData() {
