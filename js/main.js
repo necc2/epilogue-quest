@@ -350,4 +350,198 @@ function startGame() {
   console.log("EPILOGUE QUEST 起動！");
 }
 
+// =================================
+// ガチャ機能
+// =================================
+
+// レアリティ設定
+const rarityRates = [
+  { rarity: "N", rate: 45 },
+  { rarity: "R", rate: 32 },
+  { rarity: "SR", rate: 20 },
+  { rarity: "SSR", rate: 3 }
+];
+
+const rarityOrder = {
+  N: 1,
+  R: 2,
+  SR: 3,
+  SSR: 4
+};
+
+// 重複時の欠片数
+const duplicateFragments = {
+  N: 2,
+  R: 5,
+  SR: 12,
+  SSR: 30
+};
+
+// ガチャ抽選
+function drawRarity() {
+  const random = Math.random() * 100;
+  let total = 0;
+
+  for (const item of rarityRates) {
+    total += item.rate;
+
+    if (random < total) {
+      return item.rarity;
+    }
+  }
+
+  return "N";
+}
+
+// キャラクター抽選
+function drawCharacter() {
+  const character =
+    characterMaster[
+      Math.floor(Math.random() * characterMaster.length)
+    ];
+
+  const rarity = drawRarity();
+
+  if (!gameData.ownedCharacters) {
+    gameData.ownedCharacters = {};
+  }
+
+  if (!gameData.fragments) {
+    gameData.fragments = {};
+  }
+
+  const owned = gameData.ownedCharacters[character.id];
+
+  let resultText = "新しい仲間が加入！";
+
+  if (!owned) {
+    gameData.ownedCharacters[character.id] = {
+      rarity: rarity,
+      level: 1
+    };
+  } else {
+    const oldRarity = owned.rarity;
+
+    if (rarityOrder[rarity] > rarityOrder[oldRarity]) {
+      owned.rarity = rarity;
+      resultText = `${oldRarity}から${rarity}に進化！`;
+    } else {
+      const fragments = duplicateFragments[oldRarity];
+
+      gameData.fragments[character.id] =
+        (gameData.fragments[character.id] || 0) + fragments;
+
+      resultText = `重複！欠片${fragments}個を獲得`;
+    }
+  }
+
+  return {
+    name: character.name,
+    rarity: rarity,
+    message: resultText
+  };
+}
+
+// ガチャ実行
+function performGacha(count) {
+  const cost = count === 10 ? 900 : 100;
+
+  if (gameData.jewels < cost) {
+    alert("ジュエルが足りません！");
+    return;
+  }
+
+  gameData.jewels -= cost;
+
+  const results = [];
+
+  for (let i = 0; i < count; i++) {
+    results.push(drawCharacter());
+  }
+
+  saveGameData();
+  renderGachaResults(results);
+}
+
+// ガチャ結果表示
+function renderGachaResults(results) {
+  const content = document.getElementById("game-content");
+
+  content.innerHTML = `
+    <section class="home-screen">
+      <h2>ガチャ結果</h2>
+
+      ${results.map(result => `
+        <div class="stage-box">
+          <strong>${result.name}</strong>
+          <span>レアリティ：${result.rarity}</span>
+          <span>${result.message}</span>
+        </div>
+      `).join("")}
+
+      <button onclick="renderGacha()">ガチャ画面に戻る</button>
+    </section>
+  `;
+}
+
+// ガチャ画面
+function renderGacha() {
+  const content = document.getElementById("game-content");
+
+  content.innerHTML = `
+    <section class="home-screen">
+      <h2>通常ガチャ</h2>
+
+      <p>所持ジュエル：${gameData.jewels.toLocaleString()}</p>
+
+      <div class="stage-box">
+        <strong>レアリティ提供割合</strong>
+        <span>N：45%</span>
+        <span>R：32%</span>
+        <span>SR：20%</span>
+        <span>SSR：3%</span>
+      </div>
+
+      <button onclick="performGacha(1)">
+        1回引く（100ジュエル）
+      </button>
+
+      <button onclick="performGacha(10)">
+        10連ガチャ（900ジュエル）
+      </button>
+    </section>
+  `;
+}
+
+// ガチャ画面への切り替え
+function renderPage(page) {
+  if (page === "gacha") {
+    renderGacha();
+    return;
+  }
+
+  const content = document.getElementById("game-content");
+
+  const pages = {
+    encyclopedia: {
+      title: "図鑑",
+      description: "登場キャラクターを確認する画面です。"
+    }
+  };
+
+  const selected = pages[page];
+
+  if (!selected) {
+    renderHome();
+    return;
+  }
+
+  content.innerHTML = `
+    <section class="home-screen">
+      <h2>${selected.title}</h2>
+      <p>${selected.description}</p>
+      <p>この機能は現在準備中です。</p>
+    </section>
+  `;
+}
 startGame();
