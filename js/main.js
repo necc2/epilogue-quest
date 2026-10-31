@@ -9,8 +9,16 @@ const defaultGameData = {
   currentArea: 1,
   currentStage: 1,
   highestEndlessFloor: 0,
-  characters: [],
+    characters: [],
   party: [],
+
+  // 経験値アイテム
+  expItems: {
+    small: 0,
+    medium: 0,
+    large: 0
+  },
+
   clearedStages: [],
   lastLoginDate: null,
   lastIdleClaim: Date.now()
