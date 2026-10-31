@@ -126,6 +126,58 @@ function levelUpCharacter(id, smallCount, mediumCount, largeCount) {
 
   return true;
 }
+// =================================
+// キャラクター育成画面
+// =================================
+
+function renderLevelUp(id) {
+  const character = gameData.ownedCharacters?.[id];
+
+  if (!character) return;
+
+  const content = document.getElementById("game-content");
+  const level = character.level;
+
+  const items = gameData.expItems || {
+    small: 0,
+    medium: 0,
+    large: 0
+  };
+
+  const requiredExp = getRequiredExp(level);
+  const cost = getLevelUpCost(level);
+
+  content.innerHTML = `
+    <section class="home-screen">
+
+      <button onclick="showCharacterDetail('${id}')">
+        ← 詳細に戻る
+      </button>
+
+      <h2>キャラクター育成</h2>
+      <h3>${characterMaster.find(c => c.id === id).name}</h3>
+
+      <div class="stage-box">
+        <strong>現在のレベル：${level}</strong>
+        <p>最大レベル：${MAX_CHARACTER_LEVEL}</p>
+        <p>次のレベルに必要なEXP：${requiredExp}</p>
+        <p>必要コイン：${cost.toLocaleString()}</p>
+      </div>
+
+      <div class="stage-box">
+        <h3>経験値アイテム所持数</h3>
+        <p>小：${items.small}個（100 EXP）</p>
+        <p>中：${items.medium}個（500 EXP）</p>
+        <p>大：${items.large}個（2,500 EXP）</p>
+      </div>
+
+      <p>経験値アイテムを使ってレベルアップします。</p>
+
+      <p>現在は育成画面の準備中です。</p>
+
+    </section>
+  `;
+}
 
 function saveGameData() {
   localStorage.setItem(
