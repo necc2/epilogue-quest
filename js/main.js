@@ -130,6 +130,7 @@ function levelUpCharacter(id, smallCount, mediumCount, largeCount) {
 // キャラクター育成画面
 // =================================
 
+
 function renderLevelUp(id) {
   const character = gameData.ownedCharacters?.[id];
 
@@ -146,6 +147,9 @@ function renderLevelUp(id) {
 
   const requiredExp = getRequiredExp(level);
   const cost = getLevelUpCost(level);
+  const maxLevel = level >= MAX_CHARACTER_LEVEL;
+
+  const master = characterMaster.find(c => c.id === id);
 
   content.innerHTML = `
     <section class="home-screen">
@@ -155,7 +159,7 @@ function renderLevelUp(id) {
       </button>
 
       <h2>キャラクター育成</h2>
-      <h3>${characterMaster.find(c => c.id === id).name}</h3>
+      <h3>${master ? master.name : id}</h3>
 
       <div class="stage-box">
         <strong>現在のレベル：${level}</strong>
@@ -165,19 +169,65 @@ function renderLevelUp(id) {
       </div>
 
       <div class="stage-box">
-        <h3>経験値アイテム所持数</h3>
+        <h3>経験値アイテム</h3>
+
         <p>小：${items.small}個（100 EXP）</p>
+        <input
+          id="small-exp"
+          type="number"
+          min="0"
+          max="${items.small}"
+          step="1"
+          value="0"
+          ${maxLevel ? "disabled" : ""}
+        >
+
         <p>中：${items.medium}個（500 EXP）</p>
+        <input
+          id="medium-exp"
+          type="number"
+          min="0"
+          max="${items.medium}"
+          step="1"
+          value="0"
+          ${maxLevel ? "disabled" : ""}
+        >
+
         <p>大：${items.large}個（2,500 EXP）</p>
+        <input
+          id="large-exp"
+          type="number"
+          min="0"
+          max="${items.large}"
+          step="1"
+          value="0"
+          ${maxLevel ? "disabled" : ""}
+        >
       </div>
 
-      <p>経験値アイテムを使ってレベルアップします。</p>
-
-      <p>現在は育成画面の準備中です。</p>
+      ${
+        maxLevel
+          ? `<p>このキャラクターは最大レベルです。</p>`
+          : `
+            <button onclick="
+              if (levelUpCharacter(
+                '${id}',
+                Number(document.getElementById('small-exp').value),
+                Number(document.getElementById('medium-exp').value),
+                Number(document.getElementById('large-exp').value)
+              )) {
+                renderLevelUp('${id}');
+              }
+            ">
+              レベルアップする
+            </button>
+          `
+      }
 
     </section>
   `;
 }
+
 
 function saveGameData() {
   localStorage.setItem(
