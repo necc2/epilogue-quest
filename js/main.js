@@ -93,24 +93,49 @@ function renderHome() {
 function renderCharacters() {
   const content = document.getElementById("game-content");
 
+  const ownedCharacters = gameData.ownedCharacters || {};
+  const fragments = gameData.fragments || {};
+
   content.innerHTML = `
     <section class="home-screen">
       <h2>キャラクター</h2>
       <p>仲間たちの情報を確認できます。</p>
 
       <div class="character-grid">
-        ${characterMaster.map(character => `
-          <button
-            class="character-card"
-            onclick="showCharacterDetail('${character.id}')"
-          >
-            <div class="character-icon">✦</div>
-            <strong>${character.name}</strong>
-            <span>ID：${character.id}</span>
-            <span>${character.element || "属性未設定"}</span>
-            <span>${character.role || "役割未設定"}</span>
-          </button>
-        `).join("")}
+        ${characterMaster.map(character => {
+          const owned = ownedCharacters[character.id];
+          const fragmentCount = fragments[character.id] || 0;
+
+          return `
+            <button
+              class="character-card"
+              onclick="showCharacterDetail('${character.id}')"
+            >
+              <div class="character-icon">
+                ${owned ? "✦" : "？"}
+              </div>
+
+              <strong>${character.name}</strong>
+
+              <span>ID：${character.id}</span>
+
+              ${
+                owned
+                  ? `
+                    <span>レアリティ：${owned.rarity}</span>
+                    <span>レベル：${owned.level}</span>
+                    <span>欠片：${fragmentCount}</span>
+                  `
+                  : `
+                    <span>未加入</span>
+                  `
+              }
+
+              <span>${character.element || "属性未設定"}</span>
+              <span>${character.role || "役割未設定"}</span>
+            </button>
+          `;
+        }).join("")}
       </div>
     </section>
   `;
