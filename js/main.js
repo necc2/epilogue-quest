@@ -333,7 +333,11 @@ function showCharacterDetail(id) {
         <p>${character.skill ? character.skill.effect : ""}</p>
       </div>
 
-      <p>ステータス・育成機能は準備中です。</p>
+      ${
+        owned
+          ? `<button onclick="renderLevelUp('${id}')">育成する</button>`
+          : `<p>加入すると育成できるようになります。</p>`
+      }
     </section>
   `;
 }
