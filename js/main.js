@@ -67,6 +67,65 @@ function getLevelUpCost(level) {
 
   return 125 + 25 * (level - 1);
 }
+// =================================
+// レベルアップ実行処理
+// =================================
+
+function levelUpCharacter(id, smallCount, mediumCount, largeCount) {
+  const character = gameData.ownedCharacters?.[id];
+
+  if (!character) {
+    alert("このキャラクターは未加入です！");
+    return false;
+  }
+
+  if (character.level >= MAX_CHARACTER_LEVEL) {
+    alert("このキャラクターは最大レベルです！");
+    return false;
+  }
+
+  const items = gameData.expItems;
+
+  if (
+    smallCount > items.small ||
+    mediumCount > items.medium ||
+    largeCount > items.large
+  ) {
+    alert("経験値アイテムが足りません！");
+    return false;
+  }
+
+  const gainedExp =
+    smallCount * 100 +
+    mediumCount * 500 +
+    largeCount * 2500;
+
+  const requiredExp = getRequiredExp(character.level);
+  const cost = getLevelUpCost(character.level);
+
+  if (gainedExp < requiredExp) {
+    alert("経験値が足りません！");
+    return false;
+  }
+
+  if (gameData.coins < cost) {
+    alert("コインが足りません！");
+    return false;
+  }
+
+  items.small -= smallCount;
+  items.medium -= mediumCount;
+  items.large -= largeCount;
+
+  gameData.coins -= cost;
+  character.level += 1;
+
+  saveGameData();
+
+  alert(`${character.level}レベルになりました！`);
+
+  return true;
+}
 
 function saveGameData() {
   localStorage.setItem(
