@@ -35,6 +35,7 @@ EPILOGUE QUEST - Original Idle RPG
     </nav>
   </div>
 
-  <script src="js/main.js"></script>
+<script src="js/characters.js"></script>
+<script src="js/main.js"></script>
 </body>
 </html>
