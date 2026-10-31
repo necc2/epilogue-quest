@@ -93,3 +93,78 @@ body {
   color: #7665c9;
   font-weight: bold;
 }
+
+/* =================================
+   HOME SCREEN
+================================= */
+
+.resource-area {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.resource-box {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px 8px;
+  background: #f4f2fc;
+  border-radius: 14px;
+}
+
+.resource-box span,
+.stage-box span {
+  font-size: 12px;
+  color: #777b91;
+}
+
+.resource-box strong {
+  font-size: 21px;
+  color: #6555ad;
+}
+
+.stage-box {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 14px;
+  padding: 18px;
+  background: linear-gradient(135deg, #eeeaff, #f7f3ff);
+  border-radius: 14px;
+}
+
+.stage-box strong {
+  font-size: 20px;
+  color: #51458f;
+}
+
+#party-area {
+  margin-top: 18px;
+  padding: 20px 12px;
+  background: #f5f3fb;
+  border-radius: 14px;
+}
+
+#party-area h3,
+.idle-box h3 {
+  margin-top: 0;
+  color: #51458f;
+}
+
+.idle-box {
+  margin-top: 16px;
+  padding: 18px;
+  background: #fff8ed;
+  border-radius: 14px;
+}
+
+.idle-box h3 {
+  color: #a57939;
+}
+
+.idle-box p {
+  font-size: 12px;
+  line-height: 1.7;
+}
