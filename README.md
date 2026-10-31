@@ -1,5 +1,3 @@
-# epilogue-quest
-EPILOGUE QUEST - Original Idle RPG
 <!DOCTYPE html>
 <html lang="ja">
 <head>
