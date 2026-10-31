@@ -1,7 +1,6 @@
-
 /* =================================
    EPILOGUE QUEST
-   ゲーム基本管理
+   ゲーム基本管理・画面切り替え
 ================================= */
 
 const defaultGameData = {
@@ -50,8 +49,6 @@ function renderHome() {
 
   content.innerHTML = `
     <section class="home-screen">
-      <h2>冒険のはじまり</h2>
-      <p>物語の、その先へ。</p>
 
       <div class="resource-area">
         <div class="resource-box">
@@ -75,40 +72,102 @@ function renderHome() {
 
       <div id="party-area">
         <h3>冒険パーティー</h3>
-        <p>仲間を準備しています...</p>
-        <p>最大3人まで編成できます。</p>
+
+        <div class="party-slots">
+          <div class="party-slot">仲間 1</div>
+          <div class="party-slot">仲間 2</div>
+          <div class="party-slot">仲間 3</div>
+        </div>
       </div>
 
       <div class="idle-box">
         <h3>放置報酬</h3>
-        <p>冒険していない間も報酬が貯まります。</p>
-        <p>最大8時間まで蓄積されます。</p>
+        <p>冒険していない間に貯まった報酬を受け取れます。</p>
+        <button class="claim-button" disabled>
+          準備中
+        </button>
       </div>
 
-      <div class="character-list">
-        <h3>キャラクター一覧</h3>
-        <p>登録キャラクター：${characterMaster.length}名</p>
-
-        <div class="character-grid">
-          ${characterMaster.map(character => `
-            <div class="character-card">
-              <div class="character-icon">✦</div>
-              <strong>${character.name}</strong>
-              <span>ID：${character.id}</span>
-              <span>${character.element || "属性未設定"}</span>
-              <span>${character.role || "役割未設定"}</span>
-            </div>
-          `).join("")}
-        </div>
-      </div>
     </section>
   `;
 }
 
-// 起動
+// 各メニュー画面
+function renderPage(page) {
+  const content = document.getElementById("game-content");
+
+  const pages = {
+    characters: {
+      title: "キャラクター",
+      description: "仲間の確認や育成を行う画面です。"
+    },
+    adventure: {
+      title: "冒険",
+      description: "エリアやステージを選択する画面です。"
+    },
+    gacha: {
+      title: "ガチャ",
+      description: "新しい仲間と出会う画面です。"
+    },
+    encyclopedia: {
+      title: "図鑑",
+      description: "登場キャラクターを確認する画面です。"
+    }
+  };
+
+  const selected = pages[page];
+
+  if (!selected) {
+    renderHome();
+    return;
+  }
+
+  content.innerHTML = `
+    <section class="home-screen">
+      <h2>${selected.title}</h2>
+      <p>${selected.description}</p>
+      <p>この機能は現在準備中です。</p>
+    </section>
+  `;
+}
+
+// メニュー切り替え
+function setupNavigation() {
+  const buttons = document.querySelectorAll(".bottom-nav button");
+
+  buttons.forEach(button => {
+    button.addEventListener("click", () => {
+      const page = button.dataset.page;
+
+      buttons.forEach(item => {
+        item.classList.remove("active");
+      });
+
+      button.classList.add("active");
+
+      if (page === "home") {
+        renderHome();
+      } else {
+        renderPage(page);
+      }
+    });
+  });
+}
+
+// ゲーム起動
 function startGame() {
   renderHome();
+  setupNavigation();
   saveGameData();
+
+  const homeButton = document.querySelector(
+    '.bottom-nav button[data-page="home"]'
+  );
+
+  if (homeButton) {
+    homeButton.classList.add("active");
+  }
+
   console.log("EPILOGUE QUEST 起動！");
 }
 
