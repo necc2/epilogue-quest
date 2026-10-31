@@ -4,7 +4,6 @@
    ゲーム基本管理
 ================================= */
 
-// ゲーム初期データ
 const defaultGameData = {
   coins: 3000,
   jewels: 300,
@@ -29,13 +28,12 @@ function loadGameData() {
       };
     }
   } catch (error) {
-    console.error("セーブデータの読み込みに失敗:", error);
+    console.error("セーブデータ読み込みエラー:", error);
   }
 
   return { ...defaultGameData };
 }
 
-// ゲームデータ
 let gameData = loadGameData();
 
 // セーブ
@@ -46,13 +44,12 @@ function saveGameData() {
   );
 }
 
-// ホーム画面表示
+// ホーム画面
 function renderHome() {
   const content = document.getElementById("game-content");
 
   content.innerHTML = `
     <section class="home-screen">
-
       <h2>冒険のはじまり</h2>
       <p>物語の、その先へ。</p>
 
@@ -88,17 +85,31 @@ function renderHome() {
         <p>最大8時間まで蓄積されます。</p>
       </div>
 
+      <div class="character-list">
+        <h3>キャラクター一覧</h3>
+        <p>登録キャラクター：${characterMaster.length}名</p>
+
+        <div class="character-grid">
+          ${characterMaster.map(character => `
+            <div class="character-card">
+              <div class="character-icon">✦</div>
+              <strong>${character.name}</strong>
+              <span>ID：${character.id}</span>
+              <span>${character.element || "属性未設定"}</span>
+              <span>${character.role || "役割未設定"}</span>
+            </div>
+          `).join("")}
+        </div>
+      </div>
     </section>
   `;
 }
 
-// ゲーム起動
+// 起動
 function startGame() {
   renderHome();
   saveGameData();
-
   console.log("EPILOGUE QUEST 起動！");
 }
 
-// 実行
 startGame();
