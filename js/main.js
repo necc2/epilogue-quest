@@ -11,6 +11,7 @@ const defaultGameData = {
   highestEndlessFloor: 0,
   characters: [],
   party: [],
+  clearedStages: [],
   lastLoginDate: null,
   lastIdleClaim: Date.now()
 };
@@ -81,7 +82,7 @@ function renderHome() {
       <div class="idle-box">
         <h3>放置報酬</h3>
         <p>冒険していない間に貯まった報酬を受け取れます。</p>
-        <button class="claim-button" disabled>準備中</button>
+        <button disabled>準備中</button>
       </div>
 
     </section>
@@ -153,15 +154,132 @@ function showCharacterDetail(id) {
   `;
 }
 
+// 冒険画面
+function renderAdventure() {
+  const content = document.getElementById("game-content");
+
+  let areaHTML = "";
+
+  for (let area = 1; area <= 3; area++) {
+    const areaUnlocked = area <= gameData.currentArea;
+
+    let stagesHTML = "";
+
+    for (let stage = 1; stage <= 5; stage++) {
+      const stageKey = `${area}-${stage}`;
+      const cleared = gameData.clearedStages.includes(stageKey);
+
+      const unlocked =
+        areaUnlocked &&
+        (
+          area < gameData.currentArea ||
+          stage <= gameData.currentStage ||
+          cleared
+        );
+
+      const boss = stage === 5;
+
+      stagesHTML += `
+        <button
+          class="stage-box"
+          ${unlocked
+            ? `onclick="selectStage(${area}, ${stage})"`
+            : "disabled"}
+        >
+          <strong>
+            ${boss ? "BOSS " : "STAGE "}
+            ${stage}
+          </strong>
+          <span>
+            ${
+              cleared
+                ? "攻略済み"
+                : unlocked
+                  ? "挑戦可能"
+                  : "未解放"
+            }
+          </span>
+        </button>
+      `;
+    }
+
+    areaHTML += `
+      <div class="home-screen">
+        <h3>
+          AREA ${area}
+          ${areaUnlocked ? "" : "（未解放）"}
+        </h3>
+
+        <div class="stage-list">
+          ${stagesHTML}
+        </div>
+      </div>
+    `;
+  }
+
+  content.innerHTML = `
+    <section>
+      <h2>冒険</h2>
+      <p>エリアを選択してステージに挑戦します。</p>
+
+      <div class="stage-box">
+        <span>現在の攻略地点</span>
+        <strong>
+          AREA ${gameData.currentArea}
+          - STAGE ${gameData.currentStage}
+        </strong>
+      </div>
+
+      ${areaHTML}
+
+      <p>※戦闘機能は準備中です。</p>
+    </section>
+  `;
+}
+
+// ステージ選択
+function selectStage(area, stage) {
+  const stageKey = `${area}-${stage}`;
+
+  const unlocked =
+    area <= gameData.currentArea &&
+    (
+      area < gameData.currentArea ||
+      stage <= gameData.currentStage ||
+      gameData.clearedStages.includes(stageKey)
+    );
+
+  if (!unlocked) return;
+
+  gameData.selectedArea = area;
+  gameData.selectedStage = stage;
+
+  saveGameData();
+
+  const content = document.getElementById("game-content");
+
+  content.innerHTML = `
+    <section class="home-screen">
+      <button onclick="renderAdventure()">← ステージ一覧に戻る</button>
+
+      <h2>ステージ選択</h2>
+
+      <div class="stage-box">
+        <span>選択中のステージ</span>
+        <strong>AREA ${area} - STAGE ${stage}</strong>
+      </div>
+
+      <p>${stage === 5 ? "ボスステージ" : "通常ステージ"}</p>
+      <p>戦闘機能は準備中です。</p>
+    </section>
+  `;
+}
+
 // その他の画面
 function renderPage(page) {
   const content = document.getElementById("game-content");
 
   const pages = {
-    adventure: {
-      title: "冒険",
-      description: "エリアやステージを選択する画面です。"
-    },
     gacha: {
       title: "ガチャ",
       description: "新しい仲間と出会う画面です。"
@@ -206,6 +324,8 @@ function setupNavigation() {
         renderHome();
       } else if (page === "characters") {
         renderCharacters();
+      } else if (page === "adventure") {
+        renderAdventure();
       } else {
         renderPage(page);
       }
