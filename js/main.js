@@ -714,6 +714,7 @@ function performGacha(count) {
   renderGachaResults(results);
 }
 
+
 // ガチャ結果表示
 function renderGachaResults(results) {
   const content = document.getElementById("game-content");
@@ -722,18 +723,33 @@ function renderGachaResults(results) {
     <section class="home-screen">
       <h2>ガチャ結果</h2>
 
-      ${results.map(result => `
-        <div class="stage-box">
-          <strong>${result.name}</strong>
-          <span>レアリティ：${result.rarity}</span>
-          <span>${result.message}</span>
-        </div>
-      `).join("")}
+      <div class="gacha-result-list">
+        ${results.map(result => `
+          <div class="gacha-result-card rarity-${result.rarity}">
+            ${
+              result.image
+                ? `<img
+                    src="${result.image}"
+                    alt="${result.name}"
+                    class="gacha-result-image"
+                  >`
+                : `<div class="gacha-no-image">画像準備中</div>`
+            }
+
+            <strong>${result.name}</strong>
+            <span class="gacha-result-rarity">
+              ${result.rarity}
+            </span>
+            <span>${result.message}</span>
+          </div>
+        `).join("")}
+      </div>
 
       <button onclick="renderGacha()">ガチャ画面に戻る</button>
     </section>
   `;
 }
+
 
 
 // ガチャ画面
