@@ -685,10 +685,12 @@ function drawCharacter() {
   }
 
   return {
-    name: character.name,
-    rarity: rarity,
-    message: resultText
-  };
+  id: character.id,
+  name: character.name,
+  rarity: rarity,
+  image: character.image || null,
+  message: resultText
+　};
 }
 
 // ガチャ実行
