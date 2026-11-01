@@ -20,13 +20,18 @@ const characterMaster = [
   { id: "02", name: "らむ" },
   { id: "03", name: "Momo" },
   { id: "04", name: "菜月" },
-  { id: "05", name: "だーりん" },
+  {
+    id: "05",
+    name: "だーりん",
+    image: "images/05(仮).png"
+  },
   { id: "06", name: "むあ" },
   { id: "07", name: "りせ" },
   { id: "08", name: "香守 笑凛" },
   {
     id: "09",
     name: "来栖 みお",
+    image: "images/09(仮).png",
     element: "水",
     role: "サポーター",
     skill: {
@@ -40,6 +45,7 @@ const characterMaster = [
   {
     id: "11",
     name: "Mona",
+    image: "images/11(仮).png",
     element: "光",
     role: "ヒーラー",
     skill: {
@@ -49,9 +55,17 @@ const characterMaster = [
       effect: "味方全体に毎ターン最大HPの20%を回復する再生効果"
     }
   },
-  { id: "12", name: "鈴猫" },
+  {
+    id: "12",
+    name: "鈴猫",
+    image: "images/12(仮).png"
+  },
   { id: "13", name: "ちゆ" },
-  { id: "14", name: "雨宮 憂" }
+  {
+    id: "14",
+    name: "雨宮 憂",
+    image: "images/14(仮).png"
+  }
 ];
 
 // キャラクターIDから情報を取得
