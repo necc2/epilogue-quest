@@ -752,38 +752,16 @@ function renderGachaResults(results) {
 
 
 
+
 // ガチャ画面
 function renderGacha() {
   const content = document.getElementById("game-content");
-
-  const featuredCharacters = characterMaster.filter(
-    character => character.image
-  );
-
-  const featuredHTML = featuredCharacters.map(character => `
-    <div class="gacha-character">
-      <img
-        src="${character.image}"
-        alt="${character.name}"
-        class="gacha-character-image"
-      >
-      <strong>${character.name}</strong>
-      <span>${character.element || "属性未設定"}</span>
-    </div>
-  `).join("");
 
   content.innerHTML = `
     <section class="home-screen">
       <h2>通常ガチャ</h2>
 
       <p>所持ジュエル：${gameData.jewels.toLocaleString()}</p>
-
-      <div class="stage-box">
-        <strong>ピックアップキャラクター</strong>
-        <div class="gacha-character-list">
-          ${featuredHTML || "<p>キャラクター画像は準備中です。</p>"}
-        </div>
-      </div>
 
       <div class="stage-box">
         <strong>レアリティ提供割合</strong>
@@ -803,6 +781,7 @@ function renderGacha() {
     </section>
   `;
 }
+
 
 
 // ガチャ画面への切り替え
