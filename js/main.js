@@ -723,7 +723,7 @@ function renderGachaResults(results) {
     <section class="home-screen">
       <h2>ガチャ結果</h2>
 
-      <div class="gacha-result-list">
+      <div class="gacha-result-list ${results.length === 1 ? "single-result" : ""}">
         ${results.map(result => `
           <div class="gacha-result-card rarity-${result.rarity}">
             ${
