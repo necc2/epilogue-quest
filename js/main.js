@@ -5,7 +5,7 @@
 
 const defaultGameData = {
   coins: 3000,
-  jewels: 300,
+  jewels: 33300,
   currentArea: 1,
   currentStage: 1,
   highestEndlessFloor: 0,
