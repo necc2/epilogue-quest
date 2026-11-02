@@ -273,3 +273,32 @@ body {
     grid-template-columns: repeat(5, minmax(0, 1fr));
   }
 }
+/* 1回引き専用レイアウト */
+.gacha-result-list.single-result {
+  grid-template-columns: 1fr;
+  max-width: 420px;
+  margin: 20px auto;
+}
+
+.gacha-result-list.single-result .gacha-result-card {
+  padding: 16px;
+  gap: 12px;
+}
+
+.gacha-result-list.single-result .gacha-result-image {
+  height: 360px;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+.gacha-result-list.single-result .gacha-no-image {
+  height: 360px;
+}
+
+.gacha-result-list.single-result strong {
+  font-size: 1.4em;
+}
+
+.gacha-result-list.single-result .gacha-result-rarity {
+  font-size: 1.3em;
+}
